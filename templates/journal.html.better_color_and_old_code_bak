@@ -19,6 +19,25 @@ body.dark {
     --cal-study: #d4bb89;    
 }
 
+/* === 极客森林·护眼抹茶 === */
+:root {
+    --cal-empty-wd: #ebedf0; /* 工作日空：浅灰 */
+    --cal-empty-we: #e1e4e8; /* 周末空：稍深灰 */
+
+    --cal-work:  #40c463;    /* 抹茶绿：GitHub高亮同款 */
+    --cal-rest:  #e07a5f;    /* 砖红色：温暖大地 */
+    --cal-study: #3d5a80;    /* 海洋青：深邃专注 */
+}
+
+[data-theme="dark"] {
+    --cal-empty-wd: #2d333b; 
+    --cal-empty-we: #22272e; 
+    
+    --cal-work:  #2ea043;    /* 暗夜森林绿 */
+    --cal-rest:  #c4624b;    /* 暗陶土红 */
+    --cal-study: #55828b;    /* 灰青色 */
+}
+
 .journal-container { margin-top: 20px; }
 .view-switches { margin-bottom: 30px; display: flex; gap: 15px; justify-content: center; align-items: center; }
 .view-switches button {
@@ -57,7 +76,7 @@ body.dark {
 
 .tooltip {
     visibility: hidden; width: 180px; 
-    background: rgba(255, 255, 255, 0.9); /* 仅背景半透，文字保持原色 */
+    background: var(--entry); /* 解决透明文字重叠 */
     color: var(--primary);
     text-align: left; padding: 10px; border: 1px solid var(--border);
     position: absolute; z-index: 10; bottom: 150%; left: 50%; transform: translateX(-50%);
@@ -112,7 +131,7 @@ body.dark {
                 {% endif %}
 
                 {% if page.extra.logs %}
-                    {% for log in page.extra.logs | reverse %}
+                    {% for log in page.extra.logs %}
                         {% set badge_color = "var(--cal-work)" %}
                         {% if log.status == "休息" %}{% set badge_color = "var(--cal-rest)" %}{% endif %}
                         {% if log.status == "学习" %}{% set badge_color = "var(--cal-study)" %}{% endif %}
