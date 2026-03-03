@@ -3,7 +3,7 @@
 base_url = "https://edwardzcn-decade.github.io/cela"
 
 # The site title and description; used in feeds by default.
-title = "Cela : A simple, lightweight theme for Zola🌟"
+title = "NutD'Blog"
 description = "A light weight theme for zola"
 
 # The default author for pages
@@ -67,6 +67,11 @@ feed_limit = 50
 #       {name = "authors"}, # Basic definition: no feed or pagination
 #     ]
 #
+#taxonomies = [
+#  {name = "tags", feed = true},
+#  {name = "categories", feed = true},
+#]
+
 taxonomies = [
   {name = "tags", feed = true},
   {name = "categories", feed = true},
@@ -140,10 +145,10 @@ home_title = "Hello, I'm NutDeer"
 # 列表头
 navigation = [
   {path = "/", title = "Tech"},
-  {path = "/tags", title = "Tags"},
-  {path = "/categories", title = "Categories"},
-  {path = "/journal", title = "Journal"},
-  {path = "#", title = "Search", is_search = true},
+  {path = "/logs/", title = "Logs"},
+  {path = "/notes/", title = "Notes"},
+  {path = "/tags/", title = "Tags"},
+  {path = "/search/", title = "Search"},
 ]
 
 show_home_content = true
@@ -155,7 +160,7 @@ home_content = """我是东北大学在读研究生，研究方向为<b>无人�
 # This will be used to generate the home page (with subsections) posts list
 # If you set this to "", the all the content under "content" will be shown (not recommand)
 # If you set this to "blog", the all the content under "content/blog" will be shown (recommand)
-home_content_dir = "blog"
+home_content_dir = "tech"
 # [Cela hint] Use "mix" to show subsections as an archieve on home page with collapsible lists
 # TODO fix "" empty string
 home_list_style = "default"
@@ -170,6 +175,11 @@ social_icons = [
   {path = "/atom.xml", title = "RSS", icon = "rss"},
 ]
 taxonomies_desc = []
+# taxonomies_tail = [
+#   {name = "tags", emoji = "🏷️"},
+#   {name = "categories", emoji = "📂"},
+# ]
+
 taxonomies_tail = [
   {name = "tags", emoji = "🏷️"},
   {name = "categories", emoji = "📂"},
