@@ -1,0 +1,34 @@
+<!-- class="first-entry home-info" style="align-items: flex-start; text-align: left;"> -->
+<!-- <article class="first-entry home-info"> -->
+<article class="first-entry home-info" style="align-items: flex-end; text-align: right;">
+    <header class="entry-header">
+        <h1>{{ config.extra.cela.home_title |safe}}</h1>
+    </header>
+    <div class="entry-content">
+        {{ config.extra.cela.home_content | markdown(inline=true) | safe }}
+    </div>
+    <footer class="entry-footer">
+        {% if config.extra.cela.show_home_social_icons | default(value=true) %}
+            {% include "partials/home/home_social_icons.html" %}
+        {% endif %}
+    </footer>
+</article>
+
+gemini生成的
+<header class="page-header" style="margin-top: 40px; margin-bottom: 40px; display: flex; justify-content: flex-end; align-items: baseline; flex-wrap: wrap; gap: 15px; text-align: right;">
+    
+    <h1 style="font-size: 36px; font-weight: bold; margin: 0; line-height: 1;">
+        {{ config.extra.cela.home_title | safe }}
+    </h1>
+    
+    <div class="entry-content" style="font-size: 16px; color: var(--content); margin: 0;">
+        {{ config.extra.cela.home_content | markdown(inline=true) | safe }}
+    </div>
+    
+    {% if config.extra.cela.show_home_social_icons | default(value=true) %}
+    <footer class="entry-footer" style="width: 100%; margin-top: 10px;">
+        {% include "partials/home/home_social_icons.html" %}
+    </footer>
+    {% endif %}
+
+</header>

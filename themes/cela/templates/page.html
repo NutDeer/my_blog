@@ -1,0 +1,142 @@
+{% extends "index.html" %}
+
+{% block main %}
+<article class="post-single">
+  <header class="post-header">
+      <div class="breadcrumbs">
+          <a href="{{ config.base_url }}">Home</a>&nbsp;»&nbsp;
+          <a href="{{ get_url(path='@/blog/_index.md') }}">Posts</a>&nbsp;»&nbsp;
+          <a href="{{ page.permalink }}">{{ page.title }}</a>
+      </div>
+      <h1 class="post-title">{{ page.title }}</h1>
+      {% if page.description %}
+      <div class="post-description">
+          {{ page.description }}
+      </div>
+      {% endif %}
+      {% if config.extra.cela.show_post_meta | default(value=true) %}
+      <!-- <div class="post-meta">
+      {% include "partials/post/post_meta.html" %}
+      {% if config.extra.cela.show_post_edit_button %}
+          {% include "partials/post/post_edit.html" %}
+      {% endif %}
+      </div> -->
+      <div class="post-meta">
+            {{ page.date | date(format="%Y 年 %-m 月 %-d 日") }} 
+            
+            | 预计阅读时间 {{ page.reading_time }} min 
+            
+            {% if page.extra.github %}
+                | <a href="{{ page.extra.github }}" target="_blank" style="text-decoration: underline;">查看 GitHub 代码</a>
+            {% endif %}
+        </div>
+      {% endif %}
+  </header>
+
+  {% if config.extra.cela.show_toc | default(value=true) %}
+  {% include "partials/post/post_toc.html" %}
+  {% endif %}
+
+  {% if page.content %}
+  <div class="post-content">
+      {{ page.content | safe }}
+  </div>
+  {% endif %}
+
+  <footer class="post-footer">
+      {% if page.taxonomies.tags %}
+      <ul class="post-tags">
+          {% for tag in page.taxonomies.tags %}
+          {% set tag_url = get_taxonomy_url(kind="tags", name=tag, lang=page.lang) %}
+          <li><a href="{{ tag_url }}">{{ tag }}</a></li>
+          {% endfor %}
+      </ul>
+      {% endif %}
+
+    {% if config.extra.cela.show_post_nav_links | default(value=true) %}
+    {% include "partials/post/post_nav_links.html" %}
+    {% endif %}
+    {# TODO #}
+    {#- if (and site.Params.ShowShareButtons (ne .Params.disableShare true)) }}
+    {{- partial "share_icons.html" . -}}
+    {{- end #}
+  </footer>
+
+</article>
+
+<style>
+/* === 修正 2：ToC 滚动条与交互优化 === */
+@media screen and (min-width: 1200px) {
+    .toc {
+        position: fixed !important;
+        top: 150px !important;
+        left: calc(50% + 380px) !important; 
+        width: 250px !important;
+        max-height: 70vh !important;
+        overflow-x: hidden !important; 
+        overflow-y: auto !important;
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        user-select: none; 
+        cursor: default; 
+    }
+
+    /* 针对 Chrome/Edge 的可爱胶囊滚动条 */
+    .toc::-webkit-scrollbar {
+        width: 10px; /* 增加总宽度，给边框留空间 */
+    }
+    .toc::-webkit-scrollbar-thumb {
+        background-color: rgba(139, 168, 154, 0.5); /* 抹茶色半透明 */
+        background-clip: padding-box; 
+        border: 3px solid transparent; /* 这里的 3px 会向内挤压出胶囊感 */
+        border-radius: 10px; 
+    }
+    .toc::-webkit-scrollbar-thumb:hover {
+        background-color: #8ba89a; 
+    }
+
+    .toc-sticky {
+        border-left: 2px solid var(--border);
+        padding-left: 15px;
+    }
+
+    .toc-item a, .toc-item-child a {
+        cursor: pointer !important;
+        box-shadow: none !important;
+        border-bottom: 1px solid transparent !important;
+        text-decoration: none !important;
+        display: inline-block;
+        margin-bottom: 8px;
+        transition: all 0.2s ease;
+        line-height: 1.4;
+    }
+
+    .toc-item a {
+        font-weight: 600 !important;
+        color: var(--secondary) !important;
+        opacity: 0.8;
+        font-size: 0.85rem !important;
+    }
+
+    .toc-item-child a {
+        font-weight: 400 !important;
+        color: var(--secondary) !important;
+        opacity: 0.6;
+        font-size: 0.8rem !important;
+        padding-left: 12px;
+    }
+
+    .toc-item a:hover, .toc-item-child a:hover {
+        color: #7a9387 !important; 
+        opacity: 1;
+        transform: translateX(2px);
+        border-bottom: 1px solid #8ba89a !important; 
+    }
+}
+
+@media screen and (max-width: 1199px) { .toc { display: none !important; } }
+</style>
+
+{% endblock %}

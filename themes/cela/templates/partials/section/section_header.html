@@ -1,0 +1,115 @@
+{% include "partials/common/header_body_theme.html" -%}
+<header class="header">
+  <nav class="nav">
+
+
+    <div class="logo">
+      <a href="{{ config.base_url }}" accesskey="h" title="NutD'Blog" class="logo-link" style="display: flex; align-items: center; text-decoration: none;">
+        <span class="logo-name" style="font-size: 22px; font-weight: bold; line-height: 1;">NutD'Blog</span>
+      </a>
+
+      <div class="logo-switches" style="display: flex; align-items: center; gap: 6px;">
+        <button id="theme-toggle" class="theme-toggle-btn" accesskey="t" title="切换模式" style="display: flex; align-items: center; justify-content: center; border: none; background: none; padding: 0; margin: 0; cursor: pointer;">
+          <svg id="moon" style="transform: translateY(3px);" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          <svg id="sun" style="transform: translateY(3px);" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        </button>
+        <span style="color: var(--tertiary); font-weight: 200; font-size: 18px; line-height: 1; position: relative; top: 2px;">|</span>
+      </div>
+    </div>
+
+    {% if config.extra.cela.navigation %}
+      <ul id="menu">
+        {% for item in config.extra.cela.navigation %}
+          {% set path = item.path | trim | trim_start_matches(pat="//") %}
+          {% if path is starting_with("https") %}
+            {% set url = path %}
+          {% else %}
+            {% set url = config.base_url ~ path %}
+          {% endif %}
+          
+          {# --- 核心判断：精准识别当前在哪一个板块（修复 Tech 博客页下划线消失问题） --- #}
+          {% set is_active_link = false %}
+          {% if current_path %}
+              {# 统一去掉末尾斜杠，方便比对 #}
+              {% set c_path = current_path | trim_end_matches(pat="/") %}
+              {% if c_path == "" %}{% set c_path = "/" %}{% endif %}
+              
+              {% set n_path = item.path | trim_end_matches(pat="/") %}
+              {% if n_path == "" %}{% set n_path = "/" %}{% endif %}
+
+              {% if n_path == "/" %}
+                  {# 【特判】：如果是 Tech 主页，则当路径为 / 或以 /tech 开头时，都保持高亮 #}
+                  {% if c_path == "/" or c_path is starting_with("/tech") %}
+                      {% set is_active_link = true %}
+                  {% endif %}
+              {% else %}
+                  {# 其他板块（如 Logs, Notes），只要路径开头匹配就高亮 #}
+                  {% if c_path is starting_with(n_path) %}
+                      {% set is_active_link = true %}
+                  {% endif %}
+              {% endif %}
+          {% endif %}
+
+        <li>
+          <a href="{{ url }}" class="nav-link {% if is_active_link %}active{% endif %}" title="{{ item.title }}">
+            <span>{{ item.title }}</span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </nav>
+
+<style>
+/* ========================================= */
+/* 1. 导航栏下划线样式 (距离与粗细优化)      */
+/* ========================================= */
+#menu .active { border-bottom: none !important; }
+
+#menu a.nav-link span {
+    position: relative;
+    padding-bottom: 2px; /* 下划线与文字的绝佳距离 */
+    display: inline-block;
+}
+
+#menu a.nav-link.active {
+    font-weight: 600 !important; /* 半粗体，自然不突兀 */
+    color: var(--primary) !important; 
+}
+
+#menu a.nav-link.active span::after {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 3px; 
+    background-color: #8ba89a !important;
+    border-radius: 2px;
+}
+
+#menu a.nav-link:not(.active):hover span::after {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 3px;
+    background-color: rgba(139, 168, 154, 0.4) !important;
+    border-radius: 2px;
+    transition: background-color 0.2s ease;
+}
+
+/* ========================================= */
+/* 2. 隐藏页面自带的冗余元素                 */
+/* ========================================= */
+
+/* 隐藏左上角 "Home" 面包屑导航 */
+.breadcrumbs {
+    display: none !important;
+}
+
+/* 隐藏大标题右侧的 广播(RSS) SVG 图标 */
+.page-header h1 a svg,
+.post-header h1 a svg {
+    display: none !important;
+}
+</style>
+
+</header>
