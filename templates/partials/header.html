@@ -135,19 +135,8 @@ a, button, #menu a, .logo-switches, .logo-switches button, .logo-switches span {
 #menu a.nav-link {
     display: inline-block !important; /* 像 Logo 一样独立成块 */
     padding: 0 !important; /* 强制干掉主题默认的点击留白 */
-    margin: 0 6px; /* 用不可点击的外边距(Margin)来保持排版间距 */
+    margin: 0 8px; /* 用不可点击的外边距(Margin)来保持排版间距 */
     background-color: transparent !important; /* 防止主题自带的点击背景色浮现 */
-    text-align: center;
-}
-
-/* 2. 核心黑科技：创建一个隐形的、始终加粗的占位符 */
-#menu a.nav-link::before {
-    content: attr(title); /* 自动读取 a 标签里的 title 属性作为占位文字 */
-    display: block;
-    font-weight: 600 !important; /* 和你 active 时设定的粗细保持一致 */
-    height: 0; /* 高度为0，不占据垂直空间 */
-    overflow: hidden;
-    visibility: hidden; /* 隐形，但保留物理宽度 */
 }
 
 /* 4. 针对小月亮右侧的 "|" 符号区域，防止点击背景变色 */
