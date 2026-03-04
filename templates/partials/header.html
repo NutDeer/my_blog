@@ -30,8 +30,22 @@
 
         <ul id="menu">
             {% for nav in config.extra.cela.navigation %}
+            
+            {# --- 核心修改点：利用 Zola 原生语法精准判断当前页面 --- #}
+            {% set is_active = false %}
+            {% if current_path %}
+                {% set clean_nav_path = nav.path | replace(from=config.base_url, to="") %}
+                {% if clean_nav_path == "/" or clean_nav_path == "" %}
+                    {% if current_path == "/" %}
+                        {% set is_active = true %}
+                    {% endif %}
+                {% elif current_path is starting_with(clean_nav_path) %}
+                    {% set is_active = true %}
+                {% endif %}
+            {% endif %}
+
             <li>
-                <a href="{{ nav.path }}" class="nav-link">
+                <a href="{{ nav.path }}" class="nav-link {% if is_active %}active{% endif %}">
                     <span>{{ nav.title }}</span>
                 </a>
             </li>
@@ -41,31 +55,32 @@
 </header>
 
 <style>
-/* --- 左上角 Logo 样式与悬停变色 --- */
+/* --- 左上角 Logo 悬停变色 --- */
 .custom-logo {
     font-weight: 800 !important;
     font-size: 24px;
     color: var(--primary) !important;
     text-decoration: none !important;
-    transition: color 0.3s ease, transform 0.3s ease;
+    transition: color 0.3s ease;
     display: inline-block;
 }
 .custom-logo:hover {
-    color: #6b8a7c !important; /* 悬停变成你喜欢的灰绿色 */
+    color: #8ba89a !important; 
 }
 
-/* --- 导航栏下划线样式 --- */
+/* --- 右上角栏目（Tech/Logs/Notes等）下划线样式 --- */
 #menu a.nav-link {
     position: relative;
-    padding-bottom: 6px; 
+    padding-bottom: 6px; /* 控制下划线与文字的间距 */
     text-decoration: none !important;
-    border-bottom: none !important; /* 清除默认的贴字细线 */
+    border-bottom: none !important; 
+    display: inline-block;
 }
 
-/* 当前停留栏目的状态（常驻下划线） */
+/* 1. 当前所在板块：显示 #8ba89a 颜色的下划线 */
 #menu a.active {
-    font-weight: 800 !important;
-    color: var(--primary) !important;
+    font-weight: 800 !important; 
+    color: var(--primary) !important; /* 文字颜色保持主题色 */
 }
 #menu a.active::after {
     content: "";
@@ -73,12 +88,12 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 3px;
-    background-color: #6b8a7c !important; /* 常驻停留的下划线颜色 */
+    height: 3px; /* 下划线粗细 */
+    background-color: #8ba89a !important; /* 【指定颜色】 */
     border-radius: 2px;
 }
 
-/* 其他非当前栏目的鼠标悬停效果（呼吸感） */
+/* 2. 鼠标悬停其他未选中板块时：显示半透明的浅色提示线 */
 #menu a.nav-link:not(.active):hover::after {
     content: "";
     position: absolute;
@@ -86,35 +101,8 @@
     left: 0;
     width: 100%;
     height: 3px;
-    background-color: rgba(107, 138, 124, 0.4) !important; /* 悬停时显示同色系半透明 */
+    background-color: rgba(139, 168, 154, 0.4) !important; /* #8ba89a 的半透明效果 */
     border-radius: 2px;
     transition: background-color 0.2s ease;
 }
 </style>
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const currentPath = window.location.pathname;
-    const menuLinks = document.querySelectorAll('#menu a.nav-link');
-    
-    menuLinks.forEach(link => {
-        link.classList.remove('active');
-        let href = link.getAttribute('href');
-        
-        // 抹平不同环境下的路径斜杠差异
-        const pathBase = currentPath.replace(/\/$/, '') || '/';
-        const hrefBase = href.replace(/\/$/, '') || '/';
-
-        // 逻辑：如果是首页则精确匹配，如果是 Logs/Notes/Search 等则只要包含该路径就常驻高亮
-        if (hrefBase === '/') {
-            if (pathBase === '/' || pathBase === '/index.html') {
-                link.classList.add('active');
-            }
-        } else {
-            if (pathBase.includes(hrefBase)) {
-                link.classList.add('active');
-            }
-        }
-    });
-});
-</script>

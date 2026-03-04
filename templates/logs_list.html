@@ -1,0 +1,63 @@
+{% extends "index.html" %}
+
+{% block main %}
+<div class="page-header">
+    <h1>{{ section.title }}</h1>
+</div>
+
+{% if section.content %}
+<div class="post-content">
+    {{ section.content | safe }}
+</div>
+{% endif %}
+
+<div class="archive-posts">
+    {# 手动按照年份循环：先获取所有不重复的年份 #}
+    {% set all_pages = section.pages %}
+    {% if all_pages %}
+        {% set years = [] %}
+        {% for p in all_pages %}
+            {% set y = p.date | date(format="%Y") %}
+            {% if y not in years %}
+                {% set_global years = years | concat(with=y) %}
+            {% endif %}
+        {% endfor %}
+
+        {# 按照年份渲染 #}
+        {% for year in years %}
+            <div class="archive-year" style="margin-bottom: 50px;">
+                <h2 class="archive-year-header" style="margin-top: 40px; border-bottom: 2px solid var(--border); padding-bottom: 10px;">
+                    {{ year }}
+                </h2>
+                
+                {% for post in all_pages %}
+                    {% if post.date | date(format="%Y") == year %}
+                        <article class="post-entry" style="margin: 20px 0; padding: 20px; border: 1px solid var(--border); border-radius: 8px;">
+                            <header class="entry-header">
+                                <h2 style="font-size: 20px; margin-bottom: 8px;">{{ post.title }}&nbsp;»</h2>
+                            </header>
+                            
+                            {% if post.description %}
+                                <section class="entry-content" style="color: var(--secondary); font-size: 14px; margin-bottom: 10px;">
+                                    <p>{{ post.description }}</p>
+                                </section>
+                            {% elif post.summary %}
+                                <section class="entry-content" style="color: var(--secondary); font-size: 14px; margin-bottom: 10px;">
+                                    {{ post.summary | safe }}
+                                </section>
+                            {% endif %}
+                            
+                            <footer class="entry-footer" style="font-size: 12px; color: var(--tertiary);">
+                                <span>{{ post.date | date(format="%Y-%m-%d") }}</span>
+                            </footer>
+                            <a class="entry-link" aria-label="post link to {{ post.title }}" href="{{ post.permalink }}"></a>
+                        </article>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p style="text-align: center; color: var(--secondary); margin-top: 40px;">暂无日志内容</p>
+    {% endif %}
+</div>
+{% endblock main %}

@@ -208,9 +208,9 @@ unfold_toc = false
 show_word_count = true
 
 # [Cela hint] Cela will use this for search page title (default is "Search" if not set)
-search_title = "From Config: Search"
+search_title = "Search"
 # [Cela hint] Cela will use this for search page description (default is "Find posts by title or body content" if not set)
-search_description = "From Config: Find posts by title or body content"
+search_description = "按标题或正文内容查找帖子"
 
 [extra.cela.color]
 
