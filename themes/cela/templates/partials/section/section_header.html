@@ -61,22 +61,25 @@
   </nav>
 
 <style>
-/* ========================================= */
-/* 1. 导航栏下划线样式 (距离与粗细优化)      */
-/* ========================================= */
+/* 强制清除主题自带的老旧下划线 */
 #menu .active { border-bottom: none !important; }
 
+/* 核心修改：让 <a> 内部的 <span> 作为相对定位的基准，精准包裹文字 */
 #menu a.nav-link span {
     position: relative;
-    padding-bottom: 2px; /* 下划线与文字的绝佳距离 */
+    /* 👇 现在这里改数字就能完美控制距离了！2px非常贴合，想要再近就 0 或 1px */
+    padding-bottom: 2px; 
     display: inline-block;
 }
 
+/* 1. 当前所在板块文字样式 */
 #menu a.nav-link.active {
-    font-weight: 600 !important; /* 半粗体，自然不突兀 */
+    /* 👇 从 800 改成 600（半粗体），变粗效果会更自然不突兀 */
+    font-weight: 600 !important; 
     color: var(--primary) !important; 
 }
 
+/* 当前板块的 #8ba89a 颜色常驻下划线 */
 #menu a.nav-link.active span::after {
     content: "";
     position: absolute;
@@ -86,6 +89,7 @@
     border-radius: 2px;
 }
 
+/* 2. 鼠标悬停其他未选中板块时：显示半透明提示线 */
 #menu a.nav-link:not(.active):hover span::after {
     content: "";
     position: absolute;
@@ -95,6 +99,7 @@
     border-radius: 2px;
     transition: background-color 0.2s ease;
 }
+
 
 /* ========================================= */
 /* 2. 隐藏页面自带的冗余元素                 */
