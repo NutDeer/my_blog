@@ -128,7 +128,7 @@ a, button, #menu a, .logo-switches, .logo-switches button, .logo-switches span {
 /* 👉 让 Tags (标签) 页面专属居中 */
 .taxonomy-header,
 .taxonomy-list-entry .taxonomy-header {
-    text-align: center !important; 
+    text-align: right !important; 
 }
 
 /* 搜索页面标题和描述靠右/居中 */
@@ -142,4 +142,20 @@ a, button, #menu a, .logo-switches, .logo-switches button, .logo-switches span {
     font-size: 16px !important;
     color: var(--secondary) !important;
     margin-bottom: 20px !important;
+}
+
+/* ==========================================
+   彻底粉碎 Tags 大标题底部的“顽固留白”
+   ========================================== */
+
+/* 1. 打破主题自带的大盒子“最小高度”限制 */
+.taxonomy-list-entry {
+    min-height: auto !important; /* 强制取消 120px 的硬性撑高 */
+    margin-bottom: 0 !important; /* 把盒子自身的底部推力清零 */
+}
+
+/* 2. 真正控制标题和标签距离的地方（覆盖掉上面的 40px） */
+.taxonomy-header,
+.taxonomy-list-entry .taxonomy-header {
+    margin-bottom: 75px !important; /* 原本是 40px，这里改成 10px。你可以随意改为 5px, 15px 等 */
 }
