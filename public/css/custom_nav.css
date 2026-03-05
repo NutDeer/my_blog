@@ -159,3 +159,5 @@ a, button, #menu a, .logo-switches, .logo-switches button, .logo-switches span {
 .taxonomy-list-entry .taxonomy-header {
     margin-bottom: 75px !important; /* 原本是 40px，这里改成 10px。你可以随意改为 5px, 15px 等 */
 }
+
+/* 1. 打破主题自带的大盒子“最小高度”限制 */
