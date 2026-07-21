@@ -38,4 +38,16 @@ content = "ws_livox/devel/include/livox_ros_driver2\n放到要编译代码的dev
 date = 2026-06-10
 title = "Git 获取历史版本"
 content = "git log --oneline\n签出\ngit checkout f5be475"
+
+[[extra.fixes]]
+
+date = 2026-06-21
+title = "文件管理器"
+content = "nautilus ."
+
+[[extra.fixes]]
+
+date = 2026-07-21
+title = "实飞前准备 epic"
+content = "ssh xiaofeiji@192.168.43.176\n关闭 gdm\nsudo systemctl stop gdm"
 +++
