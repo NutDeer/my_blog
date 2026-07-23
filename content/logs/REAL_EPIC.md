@@ -81,7 +81,38 @@ roslaunch epic_planner com_wood.launch
 
 ## 实飞
 
+实飞使用的 `rigo.launch` `rigo.yaml` 注意参数
+
 实飞注意设置飞行限制
+
+### 电脑占用
+
+`polkitd` `/usr/NX/bin/nxserver.bin` 权限认证服务，NoMachine的关闭用
+
+```bash
+sudo /usr/NX/bin/nxserver --shutdown
+
+# NoMachine：禁止开机自启
+sudo systemctl disable nxserver.service
+```
+
+`gdm3 / gnome-shell`  这是桌面，ssh 可以停掉
+
+```bash
+# 立即停止图形桌面
+sudo systemctl stop gdm3
+
+# 禁止开机自启图形桌面
+sudo systemctl disable gdm3
+# 如果机器以后只走 SSH，可以切到纯命令行启动
+sudo systemctl set-default multi-user.target
+# 恢复图形桌面：
+sudo systemctl enable gdm3
+sudo systemctl set-default graphical.target
+sudo systemctl start gdm3
+```
+
+经实验，**桌面和 NoMachine 会占用 30% 的cpu**，`fastlio + epic (0.1采样)` 占用 57% ，所以如果发现占用过高可以检查下是不是这两个启动了
 
 ### PX4Ctrl
 

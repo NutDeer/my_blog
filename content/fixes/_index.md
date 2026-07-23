@@ -50,4 +50,16 @@ content = "nautilus ."
 date = 2026-07-21
 title = "实飞前准备 epic"
 content = "ssh xiaofeiji@192.168.43.176\n关闭 gdm\nsudo systemctl stop gdm"
+
+[[extra.fixes]]
+
+date = 2026-07-23
+title = "pcd降采样"
+content = "pcl_voxel_grid input.pcd output.pcd -leaf 0.1,0.1,0.1\n快速查看pcd中两点距离\npython3 -c \"\nimport open3d as o3d\npcd = o3d.io.read_point_cloud('garage.pcd')\no3d.visualization.draw_geometries_with_editing([pcd])\n\"\ngit查看整个树改了什么\ntig --all"
+
+[[extra.fixes]]
+
+date = 2026-07-23
+title = "清理 ubuntu 大文件"
+content = "sudo apt install qdirstat\nqdirstat"
 +++
