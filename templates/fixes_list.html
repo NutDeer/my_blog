@@ -95,10 +95,13 @@
 }
 .fix-title {
   margin: 0;
-  color: #42678E;
+  color: var(--fix-title-color, #42678E);
   font-size: var(--fix-text-size);
   font-weight: 700;
   line-height: 1.35;
+}
+body.dark .fix-title {
+  --fix-title-color: #82a8cc; /* 深蓝在黑夜模式看不清，换成浅钢蓝 */
 }
 .fix-date {
   flex: 0 0 auto;
@@ -157,6 +160,11 @@
   border: 1px solid var(--border);
   border-radius: 4px;
   padding: 1px 4px;
+}
+/* 注意：必须用 :not(pre) > code 排除代码块内的 code，否则会压过 .fix-content pre code 的透明重置，
+   导致 pre 里每行文字背后出现一条一条的底色带 */
+body.dark .fix-content :not(pre) > code {
+  background: rgba(139, 168, 154, 0.16); /* 深色背景上提高一点存在感 */
 }
 .fix-content pre {
   overflow-x: auto;

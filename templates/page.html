@@ -71,11 +71,24 @@
     }
 
     .toc-toggle-btn {
+        position: relative;
         width: 14px; height: 14px;
         border: 2px solid #8ba89a !important; 
         border-radius: 50%; cursor: pointer;
         background-color: transparent; transition: all 0.3s ease; flex-shrink: 0;
         outline: none !important; user-select: none !important; -webkit-tap-highlight-color: transparent !important;
+    }
+
+    /* 阅读进度环：围着小圆点一圈，随页面阅读进度填充，短文章也有明显反馈 */
+    .toc-toggle-btn::before {
+        content: "";
+        position: absolute;
+        inset: -5px;
+        border-radius: 50%;
+        background: conic-gradient(rgba(139, 168, 154, 0.45) calc(var(--scroll-progress, 0) * 1turn), rgba(139, 168, 154, 0.10) 0);
+        -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1.5px));
+                mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1.5px));
+        pointer-events: none;
     }
 
     .toc-toggle-btn:hover { background-color: rgba(163, 184, 173, 0.3); transform: scale(1.2); }
@@ -184,7 +197,17 @@ document.addEventListener('DOMContentLoaded', function() {
             isTocDetached = false; 
             requestTocSync();
         }
+        updateKnobProgress();
     }, { passive: true });
+
+    // 旋钮外圈的阅读进度环：直接用整页滚动进度驱动（顶部=0、底部=1，短文章也准确）
+    function updateKnobProgress() {
+        if (!toggleBtn) return;
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        const p = max > 0 ? Math.max(0, Math.min(1, window.scrollY / max)) : 1;
+        toggleBtn.style.setProperty('--scroll-progress', p.toFixed(4));
+    }
+    updateKnobProgress();
 
     // 计算根据正文进度，目录"应该"在的位置
     const calculateTargetScroll = () => {

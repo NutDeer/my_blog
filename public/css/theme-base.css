@@ -32,6 +32,7 @@
   /* --primary: var(--ctp-latte-text); */
   /* --secondary: rgb(108, 108, 108); */
   --secondary: var(--ctp-latte-subtext1);
+  --accent-text: #2b4f3f;
   --tertiary: var(--ctp-latte-surface0);
   --content: var(--ctp-latte-text);     /* too light */
   --hljs-bg: var(--bg);

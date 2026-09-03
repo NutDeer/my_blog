@@ -9,15 +9,25 @@
     --cal-empty-we: #d1d5da; 
     --cal-work: #43688f;     
     --cal-rest: #8ba89a;     
-    --cal-study: #c2a878;    
+    --cal-study: #c2a878;
+    --cal-tooltip-bg: rgba(255, 255, 255, 0.95);
+    --cal-tooltip-border: var(--border);
+    --cal-tooltip-shadow: rgba(0, 0, 0, 0.15);
+    --cal-hover-ring: rgba(0, 0, 0, 0.2);
+    --cal-today-ring: #c2603e; /* 陶土橙：和工作蓝/休息绿/学习黄都明显区分 */
 }
 
 body.dark {
-    --cal-empty-wd: #2d333b; 
-    --cal-empty-we: #373e47; 
-    --cal-work: #7a8c9e;     
-    --cal-rest: #9cbcae;     
-    --cal-study: #d4bb89;    
+    --cal-empty-wd: #363a4f; 
+    --cal-empty-we: #2b3041; 
+    --cal-work: #5d82a8;     
+    --cal-rest: #7ea893;     
+    --cal-study: #c2a05f;
+    --cal-tooltip-bg: rgba(54, 58, 79, 0.97);
+    --cal-tooltip-border: #585b70;
+    --cal-tooltip-shadow: rgba(0, 0, 0, 0.5);
+    --cal-hover-ring: rgba(255, 255, 255, 0.35);
+    --cal-today-ring: #dbe5de;
 }
 
 /* === 容器与顶部按钮对齐控制 === */
@@ -68,7 +78,9 @@ body.dark {
 .days-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; justify-items: center; }
 
 .day-cell { width: 22px; height: 22px; position: relative; cursor: pointer; border-radius: 4px; transition: 0.1s;}
-.day-cell.interactive:hover { transform: scale(1.2); z-index: 2; border: 1px solid rgba(0,0,0,0.2);}
+.day-cell.interactive:hover { transform: scale(1.2); z-index: 2; border: 1px solid var(--cal-hover-ring);}
+/* 今天的格子：外圈先垫一层和月份卡片同色的"缝"，再是描边，让标记浮起来、不和状态色混淆 */
+.day-cell.is-today { box-shadow: 0 0 0 1.5px var(--entry), 0 0 0 3px var(--cal-today-ring); }
 
 .bg-empty-wd { background-color: var(--cal-empty-wd); }
 .bg-empty-we { background-color: var(--cal-empty-we); }
@@ -78,12 +90,12 @@ body.dark {
 
 .tooltip {
     visibility: hidden; width: 180px; 
-    background: rgba(255, 255, 255, 0.9); /* 仅背景半透，文字保持原色 */
+    background: var(--cal-tooltip-bg); /* 跟随明暗主题，文字保持 var(--primary) */
     color: var(--primary);
-    text-align: left; padding: 10px; border: 1px solid var(--border);
+    text-align: left; padding: 10px; border: 1px solid var(--cal-tooltip-border);
     position: absolute; z-index: 10; bottom: 150%; left: 50%; transform: translateX(-50%);
     font-size: 13px; border-radius: 6px; 
-    box-shadow: 0 8px 16px rgba(0,0,0,0.15); /* 加深阴影效果 */
+    box-shadow: 0 8px 16px var(--cal-tooltip-shadow);
     pointer-events: none;
 }
 .day-cell.interactive:hover .tooltip { visibility: visible; }
@@ -185,6 +197,7 @@ function changeYear(year) {
 
 function renderCalendar() {
     const grid = document.getElementById('calendar-grid');
+    const today = new Date();
     let html = '';
     
     for (let m = 1; m <= 12; m++) {
@@ -215,6 +228,7 @@ function renderCalendar() {
             const dateObj = new Date(currentYear, m - 1, d);
             const dayOfWeek = dateObj.getDay(); 
             const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+            const isToday = today.getFullYear() == currentYear && today.getMonth() === m - 1 && today.getDate() === d;
 
             const log = monthLogs[d.toString()];
             let colorClass = isWeekend ? 'bg-empty-we' : 'bg-empty-wd';
@@ -235,7 +249,7 @@ function renderCalendar() {
             }
 
             html += `
-                <div class="day-cell interactive ${colorClass}">
+                <div class="day-cell interactive ${colorClass}${isToday ? ' is-today' : ''}">
                     <div class="tooltip">${tooltipText}</div>
                 </div>
             `;
